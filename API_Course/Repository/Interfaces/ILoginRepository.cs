@@ -6,5 +6,6 @@ namespace Mvc.Repository.Interfaces
     {
         TokenVO ValidateCredentials(UserVO user);
         TokenVO ValidateCredentials(TokenVO tokenVO);
+        bool RevokenToken(string Username);
     }
 }

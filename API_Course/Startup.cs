@@ -176,7 +176,7 @@ namespace MVC
 
             app.UseSwaggerUI(x =>
             {
-                x.SwaggerEndpoint("/swagger/v1/swagger.json", "teste");
+                x.SwaggerEndpoint("/swagger/v1/swagger.json", "swagger");
             });
 
             RewriteOptions options = new();

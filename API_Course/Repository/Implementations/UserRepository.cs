@@ -2,7 +2,6 @@
 using Mvc.Model;
 using Mvc.Repository.Interfaces;
 using MVC.Model.Context;
-using MVC.Repository.Implementations;
 using System;
 using System.Linq;
 using System.Security.Cryptography;
@@ -55,6 +54,21 @@ namespace Mvc.Repository.Implementations
         public User ValidationCredentials(string userName)
         {
             return _context.users.FirstOrDefault(u => u.UserName == userName);
+        }
+
+        public bool RevokenToken(string Username)
+        {
+            var user = _context.users.SingleOrDefault(u => u.UserName.Equals(Username));
+
+            if(user is null)
+            {
+                return false;
+            }
+
+            user.RefreshToken = null;
+            _context.SaveChanges();
+
+            return true;
         }
     }
 }

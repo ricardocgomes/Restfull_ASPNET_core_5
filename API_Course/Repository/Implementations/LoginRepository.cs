@@ -92,5 +92,10 @@ namespace Mvc.Repository.Implementations
                 refreshToken
                 );
         }
+
+        public bool RevokenToken(string Username)
+        {
+            return _userRepository.RevokenToken(Username);
+        }
     }
 }

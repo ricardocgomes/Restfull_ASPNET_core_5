@@ -43,5 +43,19 @@ namespace Mvc.Controllers
 
             return Ok(token);
         }
+
+        [HttpPost]
+        [Route("revoke")]
+        [Authorize("Bearer")]
+        public IActionResult Revoke()
+        {
+            var username = User.Identity.Name;
+
+            var result = _loginRepository.RevokenToken(username);
+
+            if (!result) return BadRequest("Invalid client request.");
+
+            return NoContent();
+        }
     }
 }

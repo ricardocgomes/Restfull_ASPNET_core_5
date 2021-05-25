@@ -9,5 +9,7 @@ namespace Mvc.Repository.Interfaces
         User ValidationCredentials(UserVO userVO);
         User ValidationCredentials(string userName);
         User RefreshUserToken(User user);
+
+        bool RevokenToken(string Username);
     }
 }
