@@ -32,17 +32,17 @@ namespace MVC.Business.Implementations
         // Method responsible to crete one new person
         public PersonVO Create(PersonVO person)
         {
-            var booksEntity = _personConverter.Parse(person);
-            var bookCreated = _personRepository.Create(booksEntity);
-            return _personConverter.Parse(bookCreated);
+            var personEntity = _personConverter.Parse(person);
+            var personCreated = _personRepository.Create(personEntity);
+            return _personConverter.Parse(personCreated);
         }
 
         // Method responsible for updating one person
         public PersonVO Update(PersonVO person)
         {
-            var booksEntity = _personConverter.Parse(person);
-            var bookUpdated = _personRepository.Update(booksEntity);
-            return _personConverter.Parse(bookUpdated);
+            var personEntity = _personConverter.Parse(person);
+            var personUpdated = _personRepository.Update(personEntity);
+            return _personConverter.Parse(personUpdated);
         }
 
         // Method responsible for deleting a person from an ID
@@ -54,6 +54,12 @@ namespace MVC.Business.Implementations
         public void Dispose()
         {
             _personRepository?.Dispose();
+        }
+
+        public PersonVO Disable(long Id)
+        {
+            var personEntity = _personRepository.Disable(Id);
+            return _personConverter.Parse(personEntity);
         }
     }
 }

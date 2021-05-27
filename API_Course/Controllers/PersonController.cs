@@ -29,12 +29,13 @@ namespace MVC.Controllers
             _personBusiness = personBusiness;
         }
 
-        // Maps GET requests to https://localhost:{port}/api/person
+        // Maps GET requests to /api/person
         // Get no parameters for FindAll -> Search All
         [HttpGet]
         [ProducesResponseType(200,Type = typeof(List<PersonVO>))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get()
@@ -42,13 +43,14 @@ namespace MVC.Controllers
             return Ok(_personBusiness.FindAll());
         }
 
-        // Maps GET requests to https://localhost:{port}/api/person/{id}
+        // Maps GET requests to /api/person/{id}
         // receiving an ID as in the Request Path
         // Get with parameters for FindById -> Search by ID
         [HttpGet("{id}")]
         [ProducesResponseType(200, Type = typeof(PersonVO))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
@@ -58,12 +60,13 @@ namespace MVC.Controllers
             return Ok(person);
         }
 
-        // Maps POST requests to https://localhost:{port}/api/person/
+        // Maps POST requests to /api/person/
         // [FromBody] consumes the JSON object sent in the request body
         [HttpPost]
         [ProducesResponseType(200, Type = typeof(PersonVO))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] PersonVO person)
@@ -72,12 +75,13 @@ namespace MVC.Controllers
             return Ok(_personBusiness.Create(person));
         }
 
-        // Maps PUT requests to https://localhost:{port}/api/person/
+        // Maps PUT requests to /api/person/
         // [FromBody] consumes the JSON object sent in the request body
         [HttpPut]
         [ProducesResponseType(200, Type = typeof(PersonVO))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] PersonVO person)
@@ -86,12 +90,32 @@ namespace MVC.Controllers
             return Ok(_personBusiness.Update(person));
         }
 
-        // Maps DELETE requests to https://localhost:{port}/api/person/{id}
+        /// <summary>
+        ///  Maps PUT requests to /api/person/
+        ///   consumes the JSON object sent in the request body
+        /// </summary>
+        /// <param name="person"></param>
+        /// <returns></returns>
+        [HttpPatch("{id}")]
+        [ProducesResponseType(200, Type = typeof(PersonVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult Patch(long id)
+        {
+            if (id == null) return BadRequest();
+            return Ok(_personBusiness.Disable(id));
+        }
+
+        // Maps DELETE requests to /api/person/{id}
         // receiving an ID as in the Request Path
         [HttpDelete("{id}")]
         [ProducesResponseType(200, Type = typeof(int))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         public IActionResult Delete(long id)
         {

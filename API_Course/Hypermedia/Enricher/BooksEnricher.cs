@@ -20,21 +20,21 @@ namespace MVC.Hypermedia.Enricher
                 Action = HttpActionVerb.GET,
                 Href = link,
                 Rel = RelationType.self,
-                Type = RelationTypeFormat.DefaultGet
+                Type = ResponseTypeFormat.DefaultGet
             });
             content.Links.Add(new HyperMediaLink()
             {
                 Action = HttpActionVerb.POST,
                 Href = link,
                 Rel = RelationType.self,
-                Type = RelationTypeFormat.DefaultPost
+                Type = ResponseTypeFormat.DefaultPost
             });
             content.Links.Add(new HyperMediaLink()
             {
                 Action = HttpActionVerb.PUT,
                 Href = link,
                 Rel = RelationType.self,
-                Type = RelationTypeFormat.DefaultPut
+                Type = ResponseTypeFormat.DefaultPut
             });
             content.Links.Add(new HyperMediaLink()
             {

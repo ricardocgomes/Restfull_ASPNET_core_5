@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Mvc.Configurations;
+using Mvc.Hypermedia.Enricher;
 using Mvc.Repository.Implementations;
 using Mvc.Repository.Interfaces;
 using Mvc.Services.Authentication;
@@ -126,6 +127,7 @@ namespace MVC
             var filterOptions = new HyperMediaFilterOptions();
             filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
             filterOptions.ContentResponseEnricherList.Add(new BooksEnricher());
+            services.AddSingleton(filterOptions);
 
             //Dependency Injection
             services.AddTransient<ITokenService, TokenService>();
@@ -133,11 +135,12 @@ namespace MVC
             services.AddTransient<ILoginRepository, LoginRepository>();
 
             services.AddScoped<IPersonService, PersonService>();
-            services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IBooksService, BooksService>();
+
+            services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IBooksRepository, BooksRepository>();
             services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddSingleton(filterOptions);
+            
         }
 
         private static void MigrateDataBase(string connection)

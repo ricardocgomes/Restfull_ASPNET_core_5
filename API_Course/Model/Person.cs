@@ -19,5 +19,7 @@ namespace MVC.Model
         public string Address { get; set; }
         [Column("gender")]
         public string Gender { get; set; }
+        [Column("Enabled")]
+        public bool Enabled { get; set; }
     }
 }

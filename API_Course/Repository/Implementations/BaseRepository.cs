@@ -9,7 +9,7 @@ namespace MVC.Repository.Implementations
 {
     public class BaseRepository<T> : IBaseRepository<T> where T : baseEntity
     {
-        private readonly SqlServerContext _context;
+        protected readonly SqlServerContext _context;
         protected readonly DbSet<T> DbSet;
 
         public BaseRepository(SqlServerContext context)

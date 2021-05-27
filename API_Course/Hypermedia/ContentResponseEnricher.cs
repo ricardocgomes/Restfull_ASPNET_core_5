@@ -37,7 +37,7 @@ namespace MVC.Hypermedia
             {
                 if (okObjectResult.Value is T model)
                 {
-                    await EnrichModel(model, urlHelper);
+                    _ = EnrichModel(model, urlHelper);
                 }
                 else if (okObjectResult.Value is List<T> collection)
                 {

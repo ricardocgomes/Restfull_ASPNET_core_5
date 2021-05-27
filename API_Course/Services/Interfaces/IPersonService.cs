@@ -10,6 +10,7 @@ namespace MVC.Business
         PersonVO FindByID(long id);
         List<PersonVO> FindAll();
         PersonVO Update(PersonVO person);
+        PersonVO Disable(long Id);
         void Delete(long id);
     }
 }

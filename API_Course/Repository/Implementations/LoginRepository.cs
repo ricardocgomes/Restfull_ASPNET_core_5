@@ -62,10 +62,15 @@ namespace Mvc.Repository.Implementations
 
         public TokenVO ValidateCredentials(TokenVO tokenVO)
         {
-            var acessToken = tokenVO.AcessToken;
+            var accessToken = tokenVO.AccessToken;
             var refreshToken = tokenVO.RefreshToken;
 
-            var principal = _tokenService.GetPrincipalFromExpireToken(acessToken);
+            if (accessToken == null || refreshToken == null)
+            {
+                return null;
+            }
+
+            var principal = _tokenService.GetPrincipalFromExpireToken(accessToken);
             var userName = principal.Identity.Name;
 
             var user = _userRepository.ValidationCredentials(userName);
@@ -75,7 +80,7 @@ namespace Mvc.Repository.Implementations
                 return null;
             }
 
-            acessToken = _tokenService.GenerateAcessToken(principal.Claims);
+            accessToken = _tokenService.GenerateAcessToken(principal.Claims);
             refreshToken = _tokenService.GenerateRefreshToken();
             user.RefreshToken = refreshToken;
 
@@ -88,7 +93,7 @@ namespace Mvc.Repository.Implementations
                 true,
                 createDate.ToString(DATE_FORMAT),
                 expireDate.ToString(DATE_FORMAT),
-                acessToken,
+                accessToken,
                 refreshToken
                 );
         }
