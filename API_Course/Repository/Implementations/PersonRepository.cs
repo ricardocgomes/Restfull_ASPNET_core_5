@@ -1,6 +1,8 @@
 ﻿using MVC.Model;
 using MVC.Model.Context;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace MVC.Repository.Implementations
 {
@@ -28,6 +30,11 @@ namespace MVC.Repository.Implementations
             {
                 return null;
             }
+        }
+
+        public List<Person> FindByName(string firstName, string lastName)
+        {
+            return DbSet.Where(x => x.FirstName.Contains(firstName) || x.LastName.Contains(lastName)).ToList();
         }
     }
 }

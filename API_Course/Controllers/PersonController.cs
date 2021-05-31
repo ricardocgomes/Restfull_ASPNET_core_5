@@ -31,16 +31,16 @@ namespace MVC.Controllers
 
         // Maps GET requests to /api/person
         // Get no parameters for FindAll -> Search All
-        [HttpGet]
-        [ProducesResponseType(200,Type = typeof(List<PersonVO>))]
+        [HttpGet("{sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType(200, Type = typeof(List<PersonVO>))]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(401)]
         [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] string name, string sortDirection, int pageSize, int page)
         {
-            return Ok(_personBusiness.FindAll());
+            return Ok(_personBusiness.PagedSearch(name, sortDirection, pageSize, page));
         }
 
         // Maps GET requests to /api/person/{id}
@@ -56,6 +56,27 @@ namespace MVC.Controllers
         public IActionResult Get(long id)
         {
             var person = _personBusiness.FindByID(id);
+            if (person == null) return NotFound();
+            return Ok(person);
+        }
+
+        /// <summary>
+        /// Maps GET requests to /api/person/{id}
+        /// receiving an ID as in the Request Path
+        /// Get with parameters for FindById -> Search by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpGet("findByName")]
+        [ProducesResponseType(200, Type = typeof(PersonVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
+        [TypeFilter(typeof(HyperMediaFilter))]
+        public IActionResult GetName([FromQuery] string firstName, [FromQuery] string lastName)
+        {
+            var person = _personBusiness.FindByName(firstName, lastName);
             if (person == null) return NotFound();
             return Ok(person);
         }

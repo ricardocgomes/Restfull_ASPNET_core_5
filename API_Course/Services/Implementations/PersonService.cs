@@ -1,8 +1,10 @@
-﻿using MVC.Data.Converter.Implementations;
+﻿using Mvc.Hypermedia.Utils;
+using MVC.Data.Converter.Implementations;
 using MVC.Data.VO;
 using MVC.Model;
 using MVC.Repository;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MVC.Business.Implementations
 {
@@ -60,6 +62,40 @@ namespace MVC.Business.Implementations
         {
             var personEntity = _personRepository.Disable(Id);
             return _personConverter.Parse(personEntity);
+        }
+
+        public List<PersonVO> FindByName(string firstName, string lastName)
+        {
+            return _personConverter.Parse(_personRepository.FindByName(firstName, lastName));
+        }
+
+        public PagedSearchVO<PersonVO> PagedSearch(string name, string sortDirection, int pageSize, int page)
+        {
+            var sort = (!string.IsNullOrWhiteSpace(sortDirection) && !sortDirection.Equals("desc")) ? "asc" : "desc";
+            int ExcludeRecords = (pageSize * page) - pageSize;
+
+            var persons = _personRepository.FindAll();
+
+            if (name != null)
+            {
+                persons = persons.Where(x => x.FirstName.Contains(name) || x.LastName.Contains(name)).ToList();
+            }
+            else if (sort.Equals("desc"))
+            {
+                persons = persons.OrderByDescending(x => x.Id).ToList();
+            }
+
+            var totalResults = persons.Count;
+            persons = persons.Skip(ExcludeRecords).Take(pageSize).ToList();
+
+            return new PagedSearchVO<PersonVO>
+            {
+                CurrentPage = page,
+                List = _personConverter.Parse(persons),
+                PageSize = pageSize,
+                SortDirections = sort,
+                TotalResults = totalResults
+            };
         }
     }
 }

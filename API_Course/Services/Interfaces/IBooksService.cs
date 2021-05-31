@@ -1,4 +1,5 @@
-﻿using MVC.Data.VO;
+﻿using Mvc.Hypermedia.Utils;
+using MVC.Data.VO;
 using System;
 using System.Collections.Generic;
 
@@ -11,5 +12,6 @@ namespace MVC.Services.Interfaces
         List<BooksVO> FindAll();
         BooksVO Update(BooksVO Books);
         void Delete(long id);
+        PagedSearchVO<PersonVO> PagedSearch(string name, string sortDirection, int pageSize, int page);
     }
 }

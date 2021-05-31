@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace MVC.Repository
 {
-    public interface IBaseRepository<T>: IDisposable where T : class
+    public interface IBaseRepository<T> : IDisposable where T : class
     {
         T Create(T T);
         T FindByID(long id);
