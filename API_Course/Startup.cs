@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +19,8 @@ using Mvc.Repository.Implementations;
 using Mvc.Repository.Interfaces;
 using Mvc.Services.Authentication;
 using Mvc.Services.Authentication.Implementations;
+using Mvc.Services.Implementations;
+using Mvc.Services.Interfaces;
 using MVC.Business;
 using MVC.Business.Implementations;
 using MVC.Hypermedia.Enricher;
@@ -127,20 +131,22 @@ namespace MVC
             var filterOptions = new HyperMediaFilterOptions();
             filterOptions.ContentResponseEnricherList.Add(new PersonEnricher());
             filterOptions.ContentResponseEnricherList.Add(new BooksEnricher());
-            services.AddSingleton(filterOptions);
 
             //Dependency Injection
+            services.AddSingleton(filterOptions);
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<ILoginRepository, LoginRepository>();
 
+            services.AddTransient<IFileService, FileService>();
             services.AddScoped<IPersonService, PersonService>();
             services.AddScoped<IBooksService, BooksService>();
 
             services.AddScoped<IPersonRepository, PersonRepository>();
             services.AddScoped<IBooksRepository, BooksRepository>();
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            
+            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));            
         }
 
         private static void MigrateDataBase(string connection)
@@ -172,6 +178,7 @@ namespace MVC
             }
 
             app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
             app.UseCors();
