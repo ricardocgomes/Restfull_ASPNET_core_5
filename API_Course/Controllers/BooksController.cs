@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using MVC.Data.VO;
 using MVC.Hypermedia.Filter;
 using MVC.Services.Interfaces;
+using System.Collections.Generic;
 
 namespace MVC.Controllers
 {
@@ -22,14 +23,24 @@ namespace MVC.Controllers
             _booksService = booksService;
         }
 
-        [HttpGet]
+        [HttpGet("{sortDirection}/{pageSize}/{page}")]
+        [ProducesResponseType(200, Type = typeof(List<BooksVO>))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
-        public IActionResult Get()
+        public IActionResult Get([FromQuery] string name, string sortDirection, int pageSize, int page)
         {
-            return Ok(_booksService.FindAll());
+            return Ok(_booksService.PagedSearch(name, sortDirection, pageSize, page));
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(200, Type = typeof(BooksVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Get(long id)
         {
@@ -39,6 +50,11 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(200, Type = typeof(BooksVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Post([FromBody] BooksVO books)
         {
@@ -47,6 +63,11 @@ namespace MVC.Controllers
         }
 
         [HttpPut]
+        [ProducesResponseType(200, Type = typeof(BooksVO))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         [TypeFilter(typeof(HyperMediaFilter))]
         public IActionResult Put([FromBody] BooksVO books)
         {
@@ -55,6 +76,11 @@ namespace MVC.Controllers
         }
 
         [HttpDelete("{id}")]
+        [ProducesResponseType(200, Type = typeof(int))]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        [ProducesResponseType(404)]
         public IActionResult Delete(long id)
         {
             _booksService.Delete(id);
